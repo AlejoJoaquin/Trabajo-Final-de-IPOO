@@ -201,8 +201,8 @@ while (!$salir) {
                     $licencia = trim(fgets(STDIN));
                 } while (!ctype_digit($licencia));
 
-                //$responsableV->setDocumento($documento);
-                //$responsableV->setNombre($nombre);
+                $responsableV->setDocumento($documento);
+                $responsableV->setNombre($nombre);
                 $responsableV->setApellido($apellido);
                 $responsableV->setNumeroLicencia($licencia);
 
