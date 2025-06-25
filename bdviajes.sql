@@ -4,6 +4,8 @@ CREATE TABLE persona (
     apellido varchar(150)
 );
 
+/*hola*/
+
 CREATE TABLE pasajero (
     pdocumento varchar(15) PRIMARY KEY,
     ptelefono int,
