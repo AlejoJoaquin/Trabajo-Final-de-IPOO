@@ -151,6 +151,8 @@ class Pasajero extends Persona {
             $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '" . $doc . "'";
             if ($base->Ejecutar($consultaPasajero)) {
                 $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
+                $this->setEstadoPasajero(false);
+                $this->setEstadoPersona(false);
                 if ($base->Ejecutar($consultaPersona)) {
                     $respuesta = true;
                 } else {

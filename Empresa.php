@@ -147,6 +147,7 @@ class Empresa {
             $consulta = "UPDATE empresa SET enombre = '" . $this->getNombre() . "
                                         ', edireccion = '" . $this->getDireccion() . "
                                     ' WHERE idempresa = " . intval($this->getIdEmpresa());
+            $this->setEstadoE(false);
             if ($base->Ejecutar($consulta)) {
                 $respuesta = true;
             } else {

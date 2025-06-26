@@ -239,6 +239,7 @@ class Viaje {
 
         if($base->Iniciar()){
             if($base->Ejecutar($consulta)){
+                $this->setEstadoViaje(false);
                 $respuesta = true;
             } else {
                 $this->setMensajeDeOperacion($base->getError());

@@ -129,7 +129,7 @@ class Persona {
         if ($base->Iniciar()) {
             // Borrado logico de persona
             $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
-
+            $this->setEstadoPersona(false);
             // Borrado logico de los pasajeros con mismo doc
             $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '" . $doc . "'";
 

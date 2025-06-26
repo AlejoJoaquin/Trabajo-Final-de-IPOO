@@ -165,6 +165,8 @@ class ResponsableV extends Persona {
             if ($base->Ejecutar($consulta)) {
                 $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
                 if ($base->Ejecutar($consultaPersona)){
+                    $this->setEstadoResponsable(false);
+                    $this->setEstadoPersona(false);
                     $respuesta = true;
                 }
             } else {
