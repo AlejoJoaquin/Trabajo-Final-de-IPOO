@@ -684,7 +684,7 @@ while (!$salir) {
 
                     if ($viaje->insertar()) {
                         echo "Viaje insertado correctamente\n";
-                        $viaje->getObjResponsable()->cargarViajeResponsable($viaje);    //el parametro viaje ya tiene el id, ademas de los demas datos
+                        $viaje->getObjResponsable()->cargarViajesResponsable($viaje);    //el parametro viaje ya tiene el id, ademas de los demas datos
                     } else {
                         $mensaje = $viaje->getMensajeDeOperacion();
                         if (str_contains($mensaje, '1062')){
