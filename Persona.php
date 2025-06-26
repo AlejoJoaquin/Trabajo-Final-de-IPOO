@@ -6,14 +6,17 @@ class Persona {
     private $nombre;
     private $apellido;
     private $mensajeDeOperacion;
+    private $estadoPersona;
 
     public function __construct() {
         $this->documento = "";
         $this->nombre = "";
         $this->apellido = "";
         $this->mensajeDeOperacion = "";
+        $this->estadoPersona = "";
     }
 
+    //metodos Getters
     public function getDocumento() {
         return $this->documento;
     }
@@ -30,6 +33,11 @@ class Persona {
         return $this->mensajeDeOperacion;
     }
 
+    public function getEstadoPersona(){
+        return $this->estadoPersona;
+    }
+
+    //metodos Setter
     public function setDocumento($documento) {
         $this->documento = $documento;
     }
@@ -44,6 +52,10 @@ class Persona {
 
     public function setMensajeDeOperacion($mensaje) {
         $this->mensajeDeOperacion = $mensaje;
+    }
+
+    public function setEstadoPersona($estadoPersona){
+        $this->estadoPersona = $estadoPersona;
     }
 
     public function __toString() {
