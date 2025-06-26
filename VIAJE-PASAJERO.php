@@ -143,7 +143,11 @@ class Viaja {
         $resp = false;
         $this->mensajeDeOperacion = "";
 
-        $sql = "SELECT * FROM viaja WHERE idviaje = '" . $idViaje . "' AND pdocumento = '" . $documentoPasajero . "' AND estadoViajePasajero = TRUE";
+        $sql = "SELECT * 
+                FROM viaja 
+                WHERE idviaje = '" . $idViaje . "' 
+                AND pdocumento = '" . $documentoPasajero . "'
+                AND estadoViajePasajero = TRUE";
 
         if($base->Iniciar()){
             if ($base->Ejecutar($sql)) {
