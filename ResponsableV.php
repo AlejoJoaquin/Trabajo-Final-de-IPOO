@@ -5,13 +5,13 @@ include_once "Persona.php";
 class ResponsableV extends Persona {
     private $numeroEmpleado;
     private $numeroLicencia;
-    //DEBERIA TENER UNA COLECCION DE VIAJES
+    private $colViajesR;
 
     public function __construct() {
         parent::__construct();
         $this->numeroEmpleado = "";
         $this->numeroLicencia = "";
-        //$this->ColViajesR = [];
+        $this->colViajesR = [];
     }
 
     public function getNumeroEmpleado() {
@@ -22,12 +22,20 @@ class ResponsableV extends Persona {
         return $this->numeroLicencia;
     }
 
+    public function getColViajesR() {
+        return $this->colViajesR;
+    }
+
     public function setNumeroEmpleado($numeroEmpleado) {
         $this->numeroEmpleado = $numeroEmpleado;
     }
 
     public function setNumeroLicencia($numeroLicencia) {
         $this->numeroLicencia = $numeroLicencia;
+    }
+
+    public function setColViajesR($colViajesR) {
+        $this->colViajesR = $colViajesR;
     }
 
         public function __toString() {
@@ -192,9 +200,8 @@ class ResponsableV extends Persona {
      * @param object $objViaje
      */
     public function cargarViajesResponsable($objViaje){
-        // $coleccionViajesResponsable = $this->getColViajesR;
-        // array_push ($coleccionViajesResponsable, $objViaje)
-        // $this->setColViajesR = $$coleccionViajesResponsable;
-
+        $coleccionViajesResponsable = $this->getColViajesR();
+        array_push ($coleccionViajesResponsable, $objViaje);
+        $this->setColViajesR($coleccionViajesResponsable);
     }
 }
