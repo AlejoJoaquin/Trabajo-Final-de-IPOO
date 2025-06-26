@@ -75,8 +75,13 @@ while (!$salir) {
 
                     if ($persona->insertar()) {
                         echo "Persona insertada correctamente.\n";
-                    } else {
-                        echo "Error al insertar persona: " . $persona->getMensajeDeOperacion() . "\n";
+                    } else{
+                        $mensaje = $persona->getMensajeDeOperacion();
+                        if(str_contains($mensaje, '1062')){
+                            echo "ERROR AL INSERTAR PERSONA: el documento ingresado ya se existe \n";
+                        }else{
+                            echo "ERROR: no se pudo insertar a la persona \n";
+                        }
                     }
                 break;
 
@@ -124,7 +129,12 @@ while (!$salir) {
                         if ($persona->eliminar()) {
                             echo "Persona eliminada correctamente.\n";
                         } else {
-                            echo "Error al eliminar persona: " . $persona->getMensajeDeOperacion() . "\n";
+                            $mensaje = $persona->getMensajeDeOperacion();
+                            if(str_contains($mensaje, '1451')){
+                                echo "ERROR AL eliminar PERSONA: no se pudo eliminar porque hay datos relacionados \n";
+                            }else{
+                                echo "ERROR: no se pudo eliminar a la persona \n";
+                            }
                         }
                     } else {
                         echo "No existe la persona con ese documento.\n";
@@ -251,7 +261,11 @@ while (!$salir) {
                     if ($responsableV->eliminar()) {
                         echo "ResponsableV eliminado correctamente.\n";
                     } else {
-                        echo "Error al eliminar responsableV: " . $responsableV->getMensajeDeOperacion() . "\n";
+                        if (str_contains($mensaje, '1451')){
+                            echo "ERROR AL eliminar responsable: no se pudo eliminar porque hay datos relacionados \n";
+                        }else{
+                            echo "Error al eliminar responsable";
+                        }
                     }
                 } else {
                     echo "No existe responsableV con ese número empleado.\n";
