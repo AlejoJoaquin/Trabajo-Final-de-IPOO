@@ -13,7 +13,7 @@ class Viaja {
         $this->objViaje = null;
         $this->objPasajero = null;
         $this->mensajeDeOperacion = "";
-        $this->estadoViajePasajer = "";
+        $this->estadoViajePasajer = false;
     }
 
     // Getters

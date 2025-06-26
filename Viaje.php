@@ -24,7 +24,7 @@ class Viaje {
         $this->objResponsable = null;
         $this->colPasajeros = [];
         $this->mensajeDeOperacion = "";
-        $this->estadoViaje = "";
+        $this->estadoViaje = false;
     }
 
     // Getters

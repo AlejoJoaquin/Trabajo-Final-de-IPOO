@@ -15,7 +15,7 @@ class Empresa {
         $this->direccion = "";
         $this->colViajesE = [];
         $this->estadoE = false;
-        $this->mensajeDeOperacion = "";
+        $this->mensajeDeOperacion = false;
     }
 
     // Getters

@@ -13,7 +13,7 @@ class Persona {
         $this->nombre = "";
         $this->apellido = "";
         $this->mensajeDeOperacion = "";
-        $this->estadoPersona = "";
+        $this->estadoPersona = false;
     }
 
     //metodos Getters

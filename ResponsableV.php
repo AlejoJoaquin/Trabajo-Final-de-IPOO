@@ -13,7 +13,7 @@ class ResponsableV extends Persona {
         $this->numeroEmpleado = "";
         $this->numeroLicencia = "";
         $this->colViajesR = [];
-        $this->estadoResponsable = "";
+        $this->estadoResponsable = false;
     }
 
     //metodo Getter

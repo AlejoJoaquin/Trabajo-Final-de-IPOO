@@ -13,7 +13,7 @@ class Pasajero extends Persona {
         $this->telefono = "";
         $this->colViajes = [];
         $this->mensajeDeOperacion = "";
-        $this->estadoPasajero = "";
+        $this->estadoPasajero = false;
     }
 
     //metodos Getters
