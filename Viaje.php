@@ -300,8 +300,8 @@ class Viaje {
         return $arreglo;
     }
 
-    /** esta funcion guarda todos los pasajeros que tuvo un viaje 
-    * 
+    /** 
+    * esta funcion guarda todos los pasajeros que tuvo un viaje  
     */
     public function cargarPasajeros() {
         $id = $this->getIdViaje();
