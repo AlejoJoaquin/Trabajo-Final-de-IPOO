@@ -13,7 +13,7 @@ class Pasajero extends Persona {
         $this->telefono = "";
         $this->colViajes = [];
         $this->mensajeDeOperacion = "";
-        $this->estadoPasajero = false;
+        $this->estadoPasajero = true;
     }
 
     //metodos Getters
@@ -146,7 +146,7 @@ class Pasajero extends Persona {
         $base = new BaseDeDatos();
         $respuesta = false;
         $doc = $this->getDocumento();
-
+        // en este caso no me interesa tener guardado una persona si no esta asociado a pasjero 
         if ($base->Iniciar()) {
             $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '" . $doc . "'";
             if ($base->Ejecutar($consultaPasajero)) {

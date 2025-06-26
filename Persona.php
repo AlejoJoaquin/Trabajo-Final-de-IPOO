@@ -13,7 +13,7 @@ class Persona {
         $this->nombre = "";
         $this->apellido = "";
         $this->mensajeDeOperacion = "";
-        $this->estadoPersona = false;
+        $this->estadoPersona = true;
     }
 
     //metodos Getters
@@ -87,7 +87,7 @@ class Persona {
     public function buscar($documento) {
         $base = new BaseDeDatos();
         $respuesta = false;
-        $consulta = "SELECT * FROM persona WHERE documento = '" . $documento . "'";
+        $consulta = "SELECT * FROM persona WHERE documento = '" . $documento . "' AND estadoPersona = TRUE";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 if ($fila = $base->Registro()) {
@@ -124,25 +124,45 @@ class Persona {
     public function eliminar() {
         $base = new BaseDeDatos();
         $respuesta = false;
-        $consulta = "DELETE FROM persona WHERE documento = '" . $this->getDocumento() . "'";
+        $doc = $this->getDocumento();
+
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consulta)) {
-                $respuesta = true;
+            // Borrado logico de persona
+            $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
+
+            // Borrado logico de los pasajeros con mismo doc
+            $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '" . $doc . "'";
+
+            // Borrado logico de los responsable con mismo doc
+            $consultaResponsable = "UPDATE responsable SET estadoResponsable = FALSE WHERE rdocumento = '" . $doc . "'";
+
+            if ($base->Ejecutar($consultaPersona)) {
+                if ($base->Ejecutar($consultaPasajero)) {
+                    if ($base->Ejecutar($consultaResponsable)) {
+                        $respuesta = true;
+                    } else {
+                        $this->setMensajeDeOperacion($base->getError());
+                    }
+                } else {
+                    $this->setMensajeDeOperacion($base->getError());
+                }
             } else {
                 $this->setMensajeDeOperacion($base->getError());
             }
         } else {
             $this->setMensajeDeOperacion($base->getError());
         }
+
         return $respuesta;
     }
+
 
     public function listar($condicion = "") {
         $arreglo = [];
         $base = new BaseDeDatos();
-        $consulta = "SELECT * FROM persona";
+        $consulta = "SELECT * FROM persona WHERE estadoPersona = TRUE";
         if ($condicion != "") {
-            $consulta .= " WHERE " . $condicion;
+            $consulta .= " AND " . $condicion;
         }
         $consulta .= " ORDER BY apellido";
 
