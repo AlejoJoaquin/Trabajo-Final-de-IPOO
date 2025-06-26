@@ -13,6 +13,7 @@ class Viaje {
     private $objResponsable;
     private $colPasajeros;
     private $mensajeDeOperacion;
+    private $estadoViaje;
 
     public function __construct(){
         $this->idViaje = 0;
@@ -23,6 +24,7 @@ class Viaje {
         $this->objResponsable = null;
         $this->colPasajeros = [];
         $this->mensajeDeOperacion = "";
+        $this->estadoViaje = "";
     }
 
     // Getters
@@ -58,6 +60,10 @@ class Viaje {
         return $this->mensajeDeOperacion;
     }
 
+    public function getEstadoViaje(){
+        return $this->estadoViaje;
+    }
+
     // Setters
     public function setIdViaje($idViaje){
         $this->idViaje = $idViaje;
@@ -89,6 +95,10 @@ class Viaje {
 
     public function setMensajeDeOperacion($mensajeDeOperacion){
         $this->mensajeDeOperacion = $mensajeDeOperacion;
+    }
+
+    public function setEstadoViaje($estadoViaje){
+        $this->estadoViaje = $estadoViaje;
     }
 
     // toString
