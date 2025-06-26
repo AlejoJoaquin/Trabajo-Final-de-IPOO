@@ -39,6 +39,10 @@ class Empresa {
         return $this->mensajeDeOperacion;
     }
 
+    public function getEstadoE(){
+        return $this->estadoE;
+    }
+
     // Setters
     public function setIdEmpresa($idEmpresa) {
         $this->idEmpresa = $idEmpresa;
@@ -58,6 +62,10 @@ class Empresa {
 
     public function setMensajeDeOperacion($mensaje) {
         $this->mensajeDeOperacion = $mensaje;
+    }
+
+    public function setEstadoE($estadoE){
+        $this->estadoE = $estadoE;
     }
 
     public function __toString() {
