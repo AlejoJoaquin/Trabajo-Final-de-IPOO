@@ -680,9 +680,11 @@ while (!$salir) {
                     $viaje->setVImporte($importe);
                     $viaje->setObjEmpresa($empresa);
                     $viaje->setObjResponsable($responsable);
-    
+                    //No es necesario cargar el id ya que en insertar se asigna
+
                     if ($viaje->insertar()) {
-                        echo "Viaje insertado correctamente.\n";
+                        echo "Viaje insertado correctamente\n";
+                        $viaje->getObjResponsable()->cargarViajeResponsable($viaje);    //el parametro viaje ya tiene el id, ademas de los demas datos
                     } else {
                         $mensaje = $viaje->getMensajeDeOperacion();
                         if (str_contains($mensaje, '1062')){

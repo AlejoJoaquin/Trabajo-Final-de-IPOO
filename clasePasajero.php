@@ -192,7 +192,10 @@ class Pasajero extends Persona {
     }
 
 
-    /** En esta funcion llama a la funcion de viajes que me rtorna un array con todos los viajes de la PK que se pasa por parametro */
+    /** En esta funcion llama a la funcion de viajes que me 
+     * retorna un array con todos los viajes de la PK que se pasa por parametro 
+     * 
+    */
     public function cargarViajes() {
         $documento = $this->getDocumento();
 

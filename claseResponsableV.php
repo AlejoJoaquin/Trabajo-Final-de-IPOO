@@ -5,11 +5,13 @@ include_once "clasePersona.php";
 class ResponsableV extends Persona {
     private $numeroEmpleado;
     private $numeroLicencia;
+    //DEBERIA TENER UNA COLECCION DE VIAJES
 
     public function __construct() {
         parent::__construct();
         $this->numeroEmpleado = "";
         $this->numeroLicencia = "";
+        //$this->ColViajesR = [];
     }
 
     public function getNumeroEmpleado() {
@@ -42,11 +44,26 @@ class ResponsableV extends Persona {
         $persona = new Persona();
         $persona->setDocumento($this->getDocumento());
 
-    if (!$persona->buscar($this->getDocumento())) {
-        $persona->setNombre($this->getNombre());
-        $persona->setApellido($this->getApellido());
-        if (!$persona->insertar()) {
-            $this->setMensajeDeOperacion($persona->getMensajeDeOperacion());
+        if (!$persona->buscar($this->getDocumento())) {
+            $persona->setNombre($this->getNombre());
+            $persona->setApellido($this->getApellido());
+            if (!$persona->insertar()) {
+                $this->setMensajeDeOperacion($persona->getMensajeDeOperacion());
+            } else {
+                if ($base->Iniciar()) {
+                    $consulta = "INSERT INTO responsable (rnumeroempleado, rnumerolicencia, rdocumento) VALUES ('" .
+                        $this->getNumeroEmpleado() . "', '" .
+                        $this->getNumeroLicencia() . "', '" .
+                        $this->getDocumento() . "')";
+                    if ($base->Ejecutar($consulta)) {
+                        $respuesta = true;
+                    } else {
+                        $this->setMensajeDeOperacion($base->getError());
+                    }
+                } else {
+                    $this->setMensajeDeOperacion($base->getError());
+                }
+            }
         } else {
             if ($base->Iniciar()) {
                 $consulta = "INSERT INTO responsable (rnumeroempleado, rnumerolicencia, rdocumento) VALUES ('" .
@@ -62,24 +79,9 @@ class ResponsableV extends Persona {
                 $this->setMensajeDeOperacion($base->getError());
             }
         }
-    } else {
-        if ($base->Iniciar()) {
-            $consulta = "INSERT INTO responsable (rnumeroempleado, rnumerolicencia, rdocumento) VALUES ('" .
-                $this->getNumeroEmpleado() . "', '" .
-                $this->getNumeroLicencia() . "', '" .
-                $this->getDocumento() . "')";
-            if ($base->Ejecutar($consulta)) {
-                $respuesta = true;
-            } else {
-                $this->setMensajeDeOperacion($base->getError());
-            }
-        } else {
-            $this->setMensajeDeOperacion($base->getError());
-        }
-    }
 
-    return $respuesta;
-}
+        return $respuesta;
+    }
 
 
     public function buscar($docEmpleado) {
@@ -166,13 +168,13 @@ class ResponsableV extends Persona {
             if ($base->Iniciar()) {
                 if ($base->Ejecutar($consulta)) {
                     while ($fila = $base->Registro()) {
-                        $obj = new ResponsableV();
-                        $obj->setNumeroEmpleado($fila["rnumeroempleado"]);
-                        $obj->setNumeroLicencia($fila["rnumerolicencia"]);
-                        $obj->setDocumento($fila["documento"]);
-                        $obj->setNombre($fila["nombre"]);
-                        $obj->setApellido($fila["apellido"]);
-                        $arreglo[] = $obj;
+                        $objResponsable = new ResponsableV();
+                        $objResponsable->setNumeroEmpleado($fila["rnumeroempleado"]);
+                        $objResponsable->setNumeroLicencia($fila["rnumerolicencia"]);
+                        $objResponsable->setDocumento($fila["documento"]);
+                        $objResponsable->setNombre($fila["nombre"]);
+                        $objResponsable->setApellido($fila["apellido"]);
+                        array_push($arreglo, $objResponsable);
                     }
                 } else {
                     $this->setMensajeDeOperacion($base->getError());
@@ -183,4 +185,16 @@ class ResponsableV extends Persona {
 
             return $arreglo;
     }
+
+    /**
+     * Esta funcion recibe un objViaje por parametro y lo mete a la coleccion de viajes
+     * el objViaje ya tiene todos los datos cargados porque se hace despues de insertar un viaje
+     * @param object $objViaje
+     */
+    public function cargarViajesResponsable($objViaje){
+        // $coleccionViajesResponsable = $this->getColViajesR;
+        // array_push ($coleccionViajesResponsable, $objViaje)
+        // $this->setColViajesR = $$coleccionViajesResponsable;
+
     }
+}

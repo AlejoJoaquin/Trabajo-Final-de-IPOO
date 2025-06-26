@@ -192,6 +192,11 @@ class Viaja {
         return $arreglo;
     }
 
+    /**
+     * Esta funcion por medio de una consulta me devuelve un array con todos los viajes en los que participo el pasajero
+     * @param string $documentoPasajero
+     * @return array[]
+     */
     public function obtenerViajesPorPasajero($documentoPasajero) {
         $bd = new BaseDeDatos();
         $viajes = [];
@@ -211,6 +216,12 @@ class Viaja {
         return $viajes;
     }
 
+    /**
+     * Esta funcion retorna de una consulta un array con todos los documentos de los pasajeros que estuvieron
+     * en un viaje con id $idViaje
+     * @param int $idViaje
+     * @return array[]
+     */
     public function obtenerPasajerosPorViaje($idViaje) {
         $bd = new BaseDeDatos();
         $pasajeros = [];
