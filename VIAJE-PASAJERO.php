@@ -1,7 +1,7 @@
 <?php
 include_once "BaseDeDatos.php";
-include_once "claseViaje.php";
-include_once "clasePasajero.php";
+include_once "Viaje.php";
+include_once "Pasajero.php";
 
 class Viaja {
     private $objViaje;          // objeto Viaje

@@ -1,6 +1,6 @@
 <?php
 include_once "BaseDeDatos.php";
-include_once "clasePersona.php";
+include_once "Persona.php";
 
 class ResponsableV extends Persona {
     private $numeroEmpleado;

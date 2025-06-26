@@ -5,12 +5,12 @@ function esNum($num) {
     return ctype_digit($num) && intval($num) > 0;
 }
 
-include_once 'clasePersona.php';
-include_once 'claseViaja.php';
-include_once 'claseViaje.php';
-include_once 'claseEmpresa.php';
-include_once 'clasePasajero.php';
-include_once 'claseResponsableV.php';
+include_once 'Persona.php';
+include_once 'Viaja.php';
+include_once 'Viaje.php';
+include_once 'Empresa.php';
+include_once 'Pasajero.php';
+include_once 'ResponsableV.php';
 
 $bd = new BaseDeDatos();
 if ($bd->iniciar()){

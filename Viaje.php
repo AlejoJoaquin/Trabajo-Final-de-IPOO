@@ -1,8 +1,8 @@
 <?php
 include_once "BaseDeDatos.php";
-include_once "claseEmpresa.php";
-include_once "claseResponsableV.php";
-include_once "clasePasajero.php";
+include_once "Empresa.php";
+include_once "ResponsableV.php";
+include_once "Pasajero.php";
 
 class Viaje {
     private $idViaje;
