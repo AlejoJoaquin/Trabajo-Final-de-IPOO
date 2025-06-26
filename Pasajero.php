@@ -100,7 +100,7 @@ class Pasajero extends Persona {
         $consulta = "SELECT per.documento, per.nombre, per.apellido, p.ptelefono 
                     FROM persona per 
                     INNER JOIN pasajero p ON per.documento = p.pdocumento 
-                    WHERE per.documento = '" . $documento . "'";
+                    WHERE per.documento = '" . $documento . "' AND per.estadoPersona = TRUE AND p.estadoPasajero = TRUE";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
@@ -148,11 +148,9 @@ class Pasajero extends Persona {
         $doc = $this->getDocumento();
 
         if ($base->Iniciar()) {
-            // Se borra pasajero primero por temas de politicas de restriccion SQL
-            $consultaPasajero = "DELETE FROM pasajero WHERE pdocumento = '" . $doc . "'";
+            $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '" . $doc . "'";
             if ($base->Ejecutar($consultaPasajero)) {
-                //Una vez borado el pasajero, se borra a la persona que tenia el mismo documento
-                $consultaPersona = "DELETE FROM persona WHERE documento = '" . $doc . "'";
+                $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
                 if ($base->Ejecutar($consultaPersona)) {
                     $respuesta = true;
                 } else {
@@ -168,17 +166,16 @@ class Pasajero extends Persona {
         return $respuesta;
     }
 
-
     public function listar($condicion = "") {
         $arreglo = [];
         $base = new BaseDeDatos();
 
         $consulta = "SELECT p.pdocumento, p.ptelefono, per.nombre, per.apellido 
                     FROM pasajero p 
-                    INNER JOIN persona per ON p.pdocumento = per.documento";
+                    INNER JOIN persona per ON p.pdocumento = per.documento WHERE per.estadoPersona = TRUE AND p.estadoPasajero = TRUE";
 
         if ($condicion != "") {
-            $consulta .= " WHERE " . $condicion;
+            $consulta .= " AND " . $condicion;
         }
 
         $consulta .= " ORDER BY per.apellido";
