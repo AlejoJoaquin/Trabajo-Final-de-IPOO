@@ -6,14 +6,17 @@ class Pasajero extends Persona {
     private $telefono;
     private $colViajes;
     private $mensajeDeOperacion;
+    private $estadoPasajero;
 
     public function __construct() {
         parent::__construct();
         $this->telefono = "";
         $this->colViajes = [];
         $this->mensajeDeOperacion = "";
+        $this->estadoPasajero = "";
     }
 
+    //metodos Getters
     public function getTelefono() {
         return $this->telefono;
     }
@@ -26,6 +29,11 @@ class Pasajero extends Persona {
         return $this->mensajeDeOperacion;
     }
 
+    public function getEstadoPasajero(){
+        return $this->estadoPasajero;
+    }
+
+    //metodos Setter
     public function setTelefono($telefono) {
         $this->telefono = $telefono;
     }
@@ -36,6 +44,10 @@ class Pasajero extends Persona {
 
     public function setMensajeDeOperacion($mensajeDeOperacion) {
         $this->mensajeDeOperacion = $mensajeDeOperacion;
+    }
+
+    public function setEstadoPasajero($estadoPasajero){
+        $this->estadoPasajero = $estadoPasajero;
     }
 
     public function __toString() {
