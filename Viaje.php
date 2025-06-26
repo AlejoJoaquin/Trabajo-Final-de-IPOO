@@ -154,7 +154,7 @@ class Viaje {
     public function buscar($idViaje){
         $base = new BaseDeDatos();
         $respuesta = false;
-        $consulta = "SELECT * FROM viaje WHERE idviaje = '$idViaje'";
+        $consulta = "SELECT * FROM viaje WHERE idviaje = '$idViaje' AND estadoViaje = TRUE";
         if($base->Iniciar()) {
             if($base->Ejecutar($consulta)){
                 if($fila = $base->Registro()){
@@ -165,7 +165,7 @@ class Viaje {
                     $responsable->buscar($fila["rdocumento"]);
 
                     $colPasajeros = [];
-                    $consultaPasajeros = "SELECT pdocumento FROM viaja WHERE idviaje = '$idViaje'";
+                    $consultaPasajeros = "SELECT pdocumento FROM viaja WHERE idviaje = '$idViaje' AND estadoViajePasajero = TRUE";
                     if ($base->Ejecutar($consultaPasajeros)){
                         while ($filaP = $base->Registro()){
                             $pasajero = new Pasajero("", "", "", "");
@@ -235,7 +235,7 @@ class Viaje {
         $base = new BaseDeDatos();
         $respuesta = false;
 
-        $consulta = "DELETE FROM viaje WHERE idviaje = '" . $this->getIdViaje() . "'";
+        $consulta = "UPDATE viaje SET estadoViaje = FALSE WHERE idviaje = '" . $this->getIdViaje() . "'";
 
         if($base->Iniciar()){
             if($base->Ejecutar($consulta)){
@@ -249,13 +249,14 @@ class Viaje {
         return $respuesta;
     }
 
+
     // Listar
     public function listar($condicion = ""){
         $arreglo = [];
         $base = new BaseDeDatos();
-        $consulta = "SELECT * FROM viaje";
-        if ($condicion != ""){
-            $consulta .= " WHERE " . $condicion;
+        $consulta = "SELECT * FROM viaje WHERE estadoViaje = TRUE";
+        if ($condicion != "") {
+            $consulta .= " AND " . $condicion;
         }
         $consulta .= " ORDER BY idviaje";
 
@@ -270,7 +271,7 @@ class Viaje {
                     $responsable->buscar($fila["rdocumento"]);
 
                     $colPasajeros = [];
-                    $consultaPasajeros = "SELECT pdocumento FROM viaja WHERE idviaje = " . $fila["idviaje"];
+                    $consultaPasajeros = "SELECT pdocumento FROM viaja WHERE idviaje = " . $fila["idviaje"] . " AND estadoPasajero = TRUE";
                     if($base->Ejecutar($consultaPasajeros)){
                         while ($filaP = $base->Registro()){
                             $pasajero = new Pasajero("", "", "", "");

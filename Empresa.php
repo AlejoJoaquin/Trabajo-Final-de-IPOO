@@ -114,7 +114,7 @@ class Empresa {
         }
 
         if ($base->Iniciar()) {
-            $consulta = "SELECT * FROM empresa WHERE idempresa = " . intval($idEmpresa);
+            $consulta = "SELECT * FROM empresa WHERE idempresa = " . intval($idEmpresa) . "AND estadoE = TRUE";
             if ($base->Ejecutar($consulta)) {
                 $fila = $base->Registro();
                 if ($fila != null) {
@@ -167,7 +167,7 @@ class Empresa {
         if ($this->getIdEmpresa() <= 0) {
             $this->setMensajeDeOperacion("ID de empresa inválido para eliminar");
         } elseif ($base->Iniciar()) {
-            $consulta = "DELETE FROM empresa WHERE idempresa = " . intval($this->getIdEmpresa());
+            $consulta = "UPDATE empresa SET estadoE = FALSE WHERE idempresa = " . intval($this->getIdEmpresa());
             if ($base->Ejecutar($consulta)) {
                 $respuesta = true;
             } else {
@@ -181,13 +181,13 @@ class Empresa {
     }
 
 
+
     public function listar($condicion = "") {
         $arreglo = [];
         $base = new BaseDeDatos();
-        $consulta = "SELECT * FROM empresa";
-
+        $consulta = "SELECT * FROM empresa WHERE estadoE = TRUE";
         if ($condicion != "") {
-            $consulta .= " WHERE " . $condicion;
+            $consulta .= " AND " . $condicion;
         }
         $consulta .= " ORDER BY enombre";
 
