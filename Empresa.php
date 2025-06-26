@@ -5,14 +5,16 @@ class Empresa {
     private $idEmpresa;
     private $nombre;
     private $direccion;
-    private $colViajes;
+    private $colViajesE;
+    private $estadoE;
     private $mensajeDeOperacion;
 
     public function __construct() {
         $this->idEmpresa = 0;
         $this->nombre = "";
         $this->direccion = "";
-        $this->colViajes = [];
+        $this->colViajesE = [];
+        $this->estadoE = false;
         $this->mensajeDeOperacion = "";
     }
 
@@ -29,8 +31,8 @@ class Empresa {
         return $this->direccion;
     }
 
-    public function getColViajes() {
-        return $this->colViajes;
+    public function getColViajesE() {
+        return $this->colViajesE;
     }
 
     public function getMensajeDeOperacion() {
@@ -50,8 +52,8 @@ class Empresa {
         $this->direccion = $direccion;
     }
 
-    public function setColViajes($colViajes) {
-        $this->colViajes = $colViajes;
+    public function setColViajesE($colViajesE) {
+        $this->colViajesE = $colViajesE;
     }
 
     public function setMensajeDeOperacion($mensaje) {
@@ -60,7 +62,7 @@ class Empresa {
 
     public function __toString() {
         $cadenaViajes = "";
-        foreach ($this->getColViajes() as $viaje) {
+        foreach ($this->getColViajesE() as $viaje) {
             $cadenaViajes .= $viaje . "\n";
         }
 
@@ -134,7 +136,9 @@ class Empresa {
         } elseif ($this->getNombre() == "" || $this->getDireccion() == "") {
             $this->setMensajeDeOperacion("Nombre o Dirección no pueden estar vacíos");
         } elseif ($base->Iniciar()) {
-            $consulta = "UPDATE empresa SET enombre = '" . $this->getNombre() . "', edireccion = '" . $this->getDireccion() . "' WHERE idempresa = " . intval($this->getIdEmpresa());
+            $consulta = "UPDATE empresa SET enombre = '" . $this->getNombre() . "
+                                        ', edireccion = '" . $this->getDireccion() . "
+                                    ' WHERE idempresa = " . intval($this->getIdEmpresa());
             if ($base->Ejecutar($consulta)) {
                 $respuesta = true;
             } else {
