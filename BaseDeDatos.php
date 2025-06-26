@@ -10,113 +10,111 @@ class BaseDeDatos {
     private $QUERY;
     private $RESULT;
     private $ERROR;
+
     /**
-     * Constructor de la clase que inicia ls variables instancias de la clase
-     * vinculadas a la coneccion con el Servidor de BD
+     * Constructor de la clase que inicia las variables instancias de la clase
+     * vinculadas a la conección con el Servidor de BD
      */
-    public function __construct(){
+    public function __construct() {
         $this->HOSTNAME = "127.0.0.1";
         $this->BASEDATOS = "bdViajes";
         $this->USUARIO = "root";
-        $this->CLAVE="";
-        $this->RESULT=0;
-        $this->QUERY="";
-        $this->ERROR="";
+        $this->CLAVE = "";
+        $this->RESULT = null;
+        $this->QUERY = "";
+        $this->ERROR = "";
+        $this->CONEXION = null;
     }
+
     /**
-     * Funcion que retorna una cadena
-     * con una peque�a descripcion del error si lo hubiera
+     * Función que retorna una cadena
+     * con una pequeña descripción del error si lo hubiera
      *
      * @return string
      */
-    public function getError(){
-        return "\n".$this->ERROR;
-        
+    public function getError() {
+        return "\n" . $this->ERROR;
     }
-    
+
     /**
-     * Inicia la coneccion con el Servidor y la  Base Datos Mysql.
-     * Retorna true si la coneccion con el servidor se pudo establecer y false en caso contrario
+     * Inicia la conexión con el Servidor y la Base Datos MySQL.
+     * Retorna true si la conexión con el servidor se pudo establecer y false en caso contrario
+     *
      * @return boolean
      */
-    public  function Iniciar(){
-        $resp  = false;
-        $conexion = mysqli_connect($this->HOSTNAME,$this->USUARIO,$this->CLAVE,$this->BASEDATOS);
-        if ($conexion){
-            if (mysqli_select_db($conexion,$this->BASEDATOS)){
-                $this->CONEXION = $conexion;
-                unset($this->QUERY);
-                unset($this->ERROR);
-                $resp = true;
-            }  else {
-                $this->ERROR = mysqli_errno($conexion) . ": " .mysqli_error($conexion);
-            }
-        }else{
-            $this->ERROR =  mysqli_errno($conexion) . ": " .mysqli_error($conexion);
+    public function Iniciar() {
+        $resp = false;
+        try {
+            $dsn = "mysql:host={$this->HOSTNAME};dbname={$this->BASEDATOS};charset=utf8";
+            $this->CONEXION = new PDO($dsn, $this->USUARIO, $this->CLAVE);
+            $this->CONEXION->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $resp = true;
+        } catch (PDOException $e) {
+            $this->ERROR = $e->getCode() . ": " . $e->getMessage();
         }
         return $resp;
     }
-    
+
     /**
      * Ejecuta una consulta en la Base de Datos.
-     * Recibe la consulta en una cadena enviada por parametro.
+     * Recibe la consulta en una cadena enviada por parámetro.
      *
      * @param string $consulta
      * @return boolean
      */
-    public function Ejecutar($consulta){
-        $resp  = false;
-        unset($this->ERROR);     
+    public function Ejecutar($consulta) {
+        $resp = false;
         $this->QUERY = $consulta;
-        if(  $this->RESULT = mysqli_query( $this->CONEXION,$consulta)){
+        $this->ERROR = "";
+        try {
+            $this->RESULT = $this->CONEXION->query($consulta);
             $resp = true;
-        } else {
-            $this->ERROR =mysqli_errno( $this->CONEXION).": ". mysqli_error( $this->CONEXION);
+        } catch (PDOException $e) {
+            $this->ERROR = $e->getCode() . ": " . $e->getMessage();
         }
         return $resp;
     }
-    
+
     /**
-     * Devuelve un registro retornado por la ejecucion de una consulta
-     * el puntero se despleza al siguiente registro de la consulta
+     * Devuelve un registro retornado por la ejecución de una consulta.
+     * El puntero se desplaza al siguiente registro de la consulta
      *
-     * @return boolean
+     * @return mixed|null
      */
     public function Registro() {
         $resp = null;
-        if ($this->RESULT){
-            unset($this->ERROR);
-            if($temp = mysqli_fetch_assoc($this->RESULT)){
-                $resp = $temp;
-            }else{
-                mysqli_free_result($this->RESULT);
+        if ($this->RESULT) {
+            $this->ERROR = "";
+            $registro = $this->RESULT->fetch(PDO::FETCH_ASSOC);
+            if ($registro) {
+                $resp = $registro;
+            } else {
+                $this->RESULT = null; // Liberar resultado
             }
-        }else{
-            $this->ERROR = mysqli_errno($this->CONEXION) . ": " . mysqli_error($this->CONEXION);
+        } else {
+            $this->ERROR = "Sin resultado válido para recorrer.";
         }
-        return $resp ;
+        return $resp;
     }
-    
+
     /**
      * Devuelve el id de un campo autoincrement utilizado como clave de una tabla
-     * Retorna el id numerico del registro insertado, devuelve null en caso que la ejecucion de la consulta falle
+     * Retorna el id numérico del registro insertado, devuelve null en caso que la ejecución de la consulta falle
      *
      * @param string $consulta
-     * @return int id de la tupla insertada
+     * @return int|null id de la tupla insertada
      */
-    public function devuelveIDInsercion($consulta){
+    public function devuelveIDInsercion($consulta) {
         $resp = null;
-        unset($this->ERROR);
         $this->QUERY = $consulta;
-        if ($this->RESULT = mysqli_query($this->CONEXION,$consulta)){
-            $id = mysqli_insert_id($this->CONEXION);
-            $resp =  $id;
-        } else {
-            $this->ERROR =mysqli_errno( $this->CONEXION) . ": " . mysqli_error( $this->CONEXION);
-           
+        $this->ERROR = "";
+        try {
+            $this->CONEXION->exec($consulta);
+            $resp = $this->CONEXION->lastInsertId();
+        } catch (PDOException $e) {
+            $this->ERROR = $e->getCode() . ": " . $e->getMessage();
         }
-    return $resp;
+        return $resp;
     }
-    
 }
 ?>
