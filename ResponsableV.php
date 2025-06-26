@@ -156,31 +156,35 @@ class ResponsableV extends Persona {
     }
 
     public function eliminar() {
-            $base = new BaseDeDatos();
-            $respuesta = false;
-
-            if ($base->Iniciar()) {
-                $consulta = "DELETE FROM responsable WHERE rdocumento = '" . $this->getDocumento() . "'";
-
-                if ($base->Ejecutar($consulta)) {
+        $base = new BaseDeDatos();
+        $respuesta = false;
+        $doc = $this->getDocumento();
+        // como empresa, no me interesa tener guardado una persona que no trabaja para mi
+        if ($base->Iniciar()) {
+            $consulta = "UPDATE responsable SET estadoResponsable = FALSE WHERE rdocumento = '" . $doc . "'";
+            if ($base->Ejecutar($consulta)) {
+                $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
+                if ($base->Ejecutar($consultaPersona)){
                     $respuesta = true;
-                } else {
-                    $this->setMensajeDeOperacion("No se pudo eliminar el responsable. Puede estar relacionado a otro dato.");
                 }
             } else {
-                $this->setMensajeDeOperacion("Error al conectar con la base de datos.");
+                $this->setMensajeDeOperacion("No se pudo eliminar el responsable. Puede estar relacionado a otro dato.");
             }
+        } else {
+            $this->setMensajeDeOperacion("Error al conectar con la base de datos.");
+        }
 
-            return $respuesta;
+        return $respuesta;
     }
 
     public function listar($condicion = "") {
             $arreglo = [];
             $base = new BaseDeDatos();
-            $consulta = "SELECT * FROM responsable r INNER JOIN persona p ON r.rdocumento = p.documento";
+            $consulta = "SELECT * FROM responsable r INNER JOIN persona p ON r.rdocumento = p.documento 
+                        WHERE estadoResponsable = TRUE AND estadoPersona = TRUE";
 
             if ($condicion != "") {
-                $consulta .= " WHERE " . $condicion;
+                $consulta .= " AND " . $condicion;
             }
 
             $consulta .= " ORDER BY apellido";
