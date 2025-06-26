@@ -13,7 +13,7 @@ class Viaja {
         $this->objViaje = null;
         $this->objPasajero = null;
         $this->mensajeDeOperacion = "";
-        $this->estadoViajePasajer = false;
+        $this->estadoViajePasajero = true;
     }
 
     // Getters
@@ -84,28 +84,28 @@ class Viaja {
 }
 
     public function eliminar() {
-    $base = new BaseDeDatos();
-    $resp = false;
-    $this->mensajeDeOperacion = "";
+        $base = new BaseDeDatos();
+        $resp = false;
+        $this->mensajeDeOperacion = "";
 
-    if ($this->objViaje && $this->objPasajero) {
-        $sql = "DELETE FROM viaja WHERE 
-                idviaje = '" . $this->objViaje->getIdViaje() . "' AND 
-                pdocumento = '" . $this->objPasajero->getDocumento() . "'";
+        if ($this->objViaje && $this->objPasajero) {
+            $sql = "UPDATE viaja SET estadoViajePasajero = FALSE WHERE 
+                    idviaje = '" . $this->objViaje->getIdViaje() . "' AND 
+                    pdocumento = '" . $this->objPasajero->getDocumento() . "'";
 
-        if ($base->Iniciar()) {
-            if ($base->Ejecutar($sql)) {
-                $resp = true;
+            if ($base->Iniciar()) {
+                if ($base->Ejecutar($sql)) {
+                    $resp = true;
+                }else{
+                    $this->mensajeDeOperacion = $base->getError();
+                }
             }else{
                 $this->mensajeDeOperacion = $base->getError();
             }
         }else{
-            $this->mensajeDeOperacion = $base->getError();
+            $this->mensajeDeOperacion = "Viaje o Pasajero no inicializados.";
         }
-    }else{
-        $this->mensajeDeOperacion = "Viaje o Pasajero no inicializados.";
-    }
-    return $resp;
+        return $resp;
     }
 
     public function modificar($nuevoIdViaje, $nuevoDocumentoPasajero) {
@@ -121,7 +121,6 @@ class Viaja {
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
                 $resp = true;
-                // actualizar los objetos (asumí que tenés setters para eso)
                 $nuevoViaje = new Viaje();
                 $nuevoViaje->buscar($nuevoIdViaje);
                 $this->objViaje = $nuevoViaje;
@@ -144,7 +143,7 @@ class Viaja {
         $resp = false;
         $this->mensajeDeOperacion = "";
 
-        $sql = "SELECT * FROM viaja WHERE idviaje = '" . $idViaje . "' AND pdocumento = '" . $documentoPasajero . "'";
+        $sql = "SELECT * FROM viaja WHERE idviaje = '" . $idViaje . "' AND pdocumento = '" . $documentoPasajero . "' AND estadoViajePasajero = TRUE";
 
         if($base->Iniciar()){
             if ($base->Ejecutar($sql)) {
@@ -174,9 +173,9 @@ class Viaja {
         $base = new BaseDeDatos();
         $this->mensajeDeOperacion = "";
 
-        $sql = "SELECT * FROM viaja";
+        $sql = "SELECT * FROM viaja WHERE estadoViajePasajero = TRUE";
         if ($condicion != "") {
-            $sql .= " WHERE " . $condicion;
+            $sql .= " AND " . $condicion;
         }
 
         if ($base->Iniciar()) {
@@ -212,7 +211,7 @@ class Viaja {
         $viajes = [];
 
         if ($bd->Iniciar()) {
-            $sql = "SELECT idviaje FROM viaja WHERE pdocumento = '$documentoPasajero'";
+            $sql = "SELECT idviaje FROM viaja WHERE pdocumento = '$documentoPasajero' AND estadoViajePasajero = TRUE";
             if ($bd->Ejecutar($sql)) {
                 while ($fila = $bd->Registro()) {
                     $viaje = new Viaje();
@@ -237,7 +236,7 @@ class Viaja {
         $pasajeros = [];
 
         if ($bd->Iniciar()) {
-            $sql = "SELECT pdocumento FROM viaja WHERE idviaje = '$idViaje'";
+            $sql = "SELECT pdocumento FROM viaja WHERE idviaje = '$idViaje' AND estadoViajePasajero = TRUE";
             if ($bd->Ejecutar($sql)) {
                 while ($fila = $bd->Registro()) {
                     $pasajero = new Pasajero();
