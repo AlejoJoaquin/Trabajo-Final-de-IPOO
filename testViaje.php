@@ -6,7 +6,7 @@ function esNum($num) {
 }
 
 include_once 'Persona.php';
-include_once 'Viaja.php';
+include_once 'VIAJE-PASAJERO.php';
 include_once 'Viaje.php';
 include_once 'Empresa.php';
 include_once 'Pasajero.php';
