@@ -6,14 +6,17 @@ class ResponsableV extends Persona {
     private $numeroEmpleado;
     private $numeroLicencia;
     private $colViajesR;
+    private $estadoResponsable = "";
 
     public function __construct() {
         parent::__construct();
         $this->numeroEmpleado = "";
         $this->numeroLicencia = "";
         $this->colViajesR = [];
+        $this->estadoResponsable = "";
     }
 
+    //metodo Getter
     public function getNumeroEmpleado() {
         return $this->numeroEmpleado;
     }
@@ -26,6 +29,11 @@ class ResponsableV extends Persona {
         return $this->colViajesR;
     }
 
+    public function getEstadoResponsable(){
+        return $this->estadoResponsable;
+    }
+
+    //metodo Setter
     public function setNumeroEmpleado($numeroEmpleado) {
         $this->numeroEmpleado = $numeroEmpleado;
     }
@@ -36,6 +44,10 @@ class ResponsableV extends Persona {
 
     public function setColViajesR($colViajesR) {
         $this->colViajesR = $colViajesR;
+    }
+
+    public function setEstadoResponsable($estadoResponsable){
+        $this->estadoResponsable = $estadoResponsable;
     }
 
         public function __toString() {
