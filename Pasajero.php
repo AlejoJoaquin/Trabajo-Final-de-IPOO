@@ -16,7 +16,7 @@ class Pasajero extends Persona {
         $this->estadoPasajero = true;
     }
 
-    //metodos Getters
+    // Getters
     public function getTelefono() {
         return $this->telefono;
     }
@@ -33,7 +33,7 @@ class Pasajero extends Persona {
         return $this->estadoPasajero;
     }
 
-    //metodos Setter
+    // Setters
     public function setTelefono($telefono) {
         $this->telefono = $telefono;
     }
@@ -66,17 +66,12 @@ class Pasajero extends Persona {
         $base = new BaseDeDatos();
         $respuesta = false;
 
-        $persona = new Persona();
-        $persona->setDocumento($this->getDocumento());
-
-        if (!$persona->buscar($this->getDocumento())) {
-            $persona->setNombre($this->getNombre());
-            $persona->setApellido($this->getApellido());
-            $persona->insertar();
+        if (!parent::buscar($this->getDocumento())) {
+            parent::insertar();
         }
 
         $consulta = "INSERT INTO pasajero(pdocumento, ptelefono) 
-                    VALUES ('" . $this->getDocumento() . "', '" . $this->getTelefono() . "')";
+                     VALUES ('" . $this->getDocumento() . "', '" . $this->getTelefono() . "')";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
@@ -91,23 +86,21 @@ class Pasajero extends Persona {
         return $respuesta;
     }
 
-
-
     public function buscar($documento) {
         $base = new BaseDeDatos();
         $respuesta = false;
 
         $consulta = "SELECT per.documento, per.nombre, per.apellido, p.ptelefono 
-                    FROM persona per 
-                    INNER JOIN pasajero p ON per.documento = p.pdocumento 
-                    WHERE per.documento = '" . $documento . "' AND per.estadoPersona = TRUE AND p.estadoPasajero = TRUE";
+                     FROM persona per 
+                     INNER JOIN pasajero p ON per.documento = p.pdocumento 
+                     WHERE per.documento = '$documento' AND per.estadoPersona = TRUE AND p.estadoPasajero = TRUE";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
                 if ($fila = $base->Registro()) {
-                    $this->setDocumento($fila["documento"]);
-                    $this->setNombre($fila["nombre"]);
-                    $this->setApellido($fila["apellido"]);
+                    parent::setDocumento($fila["documento"]);
+                    parent::setNombre($fila["nombre"]);
+                    parent::setApellido($fila["apellido"]);
                     $this->setTelefono($fila["ptelefono"]);
                     $respuesta = true;
                 }
@@ -126,8 +119,8 @@ class Pasajero extends Persona {
         $respuesta = false;
 
         $consulta = "UPDATE pasajero 
-                    SET ptelefono = '" . $this->getTelefono() . "' 
-                    WHERE pdocumento = '" . $this->getDocumento() . "'";
+                     SET ptelefono = '" . $this->getTelefono() . "' 
+                     WHERE pdocumento = '" . $this->getDocumento() . "'";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
@@ -146,13 +139,13 @@ class Pasajero extends Persona {
         $base = new BaseDeDatos();
         $respuesta = false;
         $doc = $this->getDocumento();
-        // en este caso no me interesa tener guardado una persona si no esta asociado a pasjero 
+
         if ($base->Iniciar()) {
-            $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '" . $doc . "'";
+            $consultaPasajero = "UPDATE pasajero SET estadoPasajero = FALSE WHERE pdocumento = '$doc'";
             if ($base->Ejecutar($consultaPasajero)) {
-                $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
+                $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '$doc'";
                 $this->setEstadoPasajero(false);
-                $this->setEstadoPersona(false);
+                parent::setEstadoPersona(false);
                 if ($base->Ejecutar($consultaPersona)) {
                     $respuesta = true;
                 } else {
@@ -173,8 +166,9 @@ class Pasajero extends Persona {
         $base = new BaseDeDatos();
 
         $consulta = "SELECT p.pdocumento, p.ptelefono, per.nombre, per.apellido 
-                    FROM pasajero p 
-                    INNER JOIN persona per ON p.pdocumento = per.documento WHERE per.estadoPersona = TRUE AND p.estadoPasajero = TRUE";
+                     FROM pasajero p 
+                     INNER JOIN persona per ON p.pdocumento = per.documento 
+                     WHERE per.estadoPersona = TRUE AND p.estadoPasajero = TRUE";
 
         if ($condicion != "") {
             $consulta .= " AND " . $condicion;
@@ -202,18 +196,10 @@ class Pasajero extends Persona {
         return $arreglo;
     }
 
-
-    /** En esta funcion llama a la funcion de viajes que me 
-     * retorna un array con todos los viajes de la PK que se pasa por parametro 
-     * 
-    */
     public function cargarViajes() {
         $documento = $this->getDocumento();
-
         $viaja = new Viaja();
-
         $viajes = $viaja->obtenerViajesPorPasajero($documento);
-
         $this->setColViajes($viajes);
     }
 }

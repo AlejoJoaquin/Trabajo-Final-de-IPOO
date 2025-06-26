@@ -61,15 +61,14 @@ class ResponsableV extends Persona {
         $respuesta = false;
         $this->setMensajeDeOperacion('');
 
-        $persona = new Persona();
-        $persona->setDocumento($this->getDocumento());
-
-        if (!$persona->buscar($this->getDocumento())) {
-            $persona->setNombre($this->getNombre());
-            $persona->setApellido($this->getApellido());
-            if (!$persona->insertar()) {
-                $this->setMensajeDeOperacion($persona->getMensajeDeOperacion());
+        $personaExistente = parent::buscar($this->getDocumento());
+        if (!$personaExistente) {
+            // No existe la persona, la inserto
+            if (!parent::insertar()) {
+                $this->setMensajeDeOperacion(parent::getMensajeDeOperacion());
+                $respuesta = false;
             } else {
+                // Insertar responsable después de insertar persona
                 if ($base->Iniciar()) {
                     $consulta = "INSERT INTO responsable (rnumeroempleado, rnumerolicencia, rdocumento) VALUES ('" .
                         $this->getNumeroEmpleado() . "', '" .
@@ -85,6 +84,7 @@ class ResponsableV extends Persona {
                 }
             }
         } else {
+            // Persona ya existe, solo inserto responsable
             if ($base->Iniciar()) {
                 $consulta = "INSERT INTO responsable (rnumeroempleado, rnumerolicencia, rdocumento) VALUES ('" .
                     $this->getNumeroEmpleado() . "', '" .
@@ -102,6 +102,8 @@ class ResponsableV extends Persona {
 
         return $respuesta;
     }
+
+
 
 
     public function buscar($docEmpleado) {
