@@ -80,7 +80,7 @@ while (!$salir) {
                         if(str_contains($mensaje, '1062')){
                             echo "ERROR AL INSERTAR PERSONA: el documento ingresado ya se existe \n";
                         }else{
-                            echo "ERROR: no se pudo insertar a la persona \n";
+                            echo "ERROR: no se pudo insertar a la persona" . $persona->getMensajeDeOperacion() . "\n";
                         }
                     }
                 break;
@@ -133,7 +133,7 @@ while (!$salir) {
                             if(str_contains($mensaje, '1451')){
                                 echo "ERROR AL eliminar PERSONA: no se pudo eliminar porque hay datos relacionados \n";
                             }else{
-                                echo "ERROR: no se pudo eliminar a la persona \n";
+                                echo "ERROR: no se pudo eliminar a la persona" . $persona->getMensajeDeOperacion() .  "\n";
                             }
                         }
                     } else {
@@ -219,7 +219,12 @@ while (!$salir) {
                 if ($responsableV->insertar()) {
                     echo "ResponsableV insertado correctamente.\n";
                 } else {
-                    echo "Error al insertar responsableV: " . $responsableV->getMensajeDeOperacion() . "\n";
+                    $mensaje = $responsableV->getMensajeDeOperacion();
+                    if(str_contains($mensaje, '1062')){
+                        echo "ERROR AL INSERTAR RESPONSABLEV: el documento ingresado ya se existe \n";
+                    }else{
+                        echo "Error al insertar responsableV: " . $responsableV->getMensajeDeOperacion() . "\n";
+                    }
                 }
             break;
 
@@ -262,9 +267,9 @@ while (!$salir) {
                         echo "ResponsableV eliminado correctamente.\n";
                     } else {
                         if (str_contains($mensaje, '1451')){
-                            echo "ERROR AL eliminar responsable: no se pudo eliminar porque hay datos relacionados \n";
+                            echo "ERROR AL eliminar RESPONSABLE: no se pudo eliminar porque hay datos relacionados \n";
                         }else{
-                            echo "Error al eliminar responsable";
+                            echo "Error al eliminar responsable" . $responsableV->getMensajeDeOperacion() . "\n";
                         }
                     }
                 } else {
@@ -350,7 +355,12 @@ while (!$salir) {
                 if ($pasajero->insertar()) {
                     echo "Pasajero insertado correctamente.\n";
                 } else {
-                    echo "Error al insertar pasajero: " . $pasajero->getMensajeDeOperacion() . "\n";
+                    $mensaje = $pasajero->getMensajeDeOperacion();
+                    if (str_contains($mensaje, '1062')){
+                        echo "ERROR AL INSERTAR PASAJERO: el documento ingresado ya se existe \n";
+                    }else{
+                        echo "Error al insertar pasajero: " . $pasajero->getMensajeDeOperacion() . "\n";
+                    }
                 }
             break;
 
@@ -390,7 +400,11 @@ while (!$salir) {
                     if ($pasajero->eliminar()) {
                         echo "Pasajero eliminado correctamente.\n";
                     } else {
-                        echo "Error al eliminar pasajero: " . $pasajero->getMensajeDeOperacion() . "\n";
+                        if (str_contains($mensaje, '1451')){
+                            echo "ERROR AL eliminar PASAJERO: no se pudo eliminar porque hay datos relacionados \n";
+                        }else{
+                            echo "Error al eliminar pasajero: " . $pasajero->getMensajeDeOperacion() . "\n";
+                        }
                     }
                 } else {
                     echo "No existe pasajero con ese documento.\n";
@@ -482,7 +496,12 @@ while (!$salir) {
                 if ($viaja->insertar()) {
                     echo "Relación insertada correctamente.\n";
                 } else {
-                    echo "Error al insertar relación: " . $viaja->getMensajeDeOperacion() . "\n";
+                    $mensaje = $viaja->getMensajeDeOperacion();
+                    if (str_contains($mensaje, '1062')){
+                        echo "ERROR AL INSERTAR VIAJA-PASAJERO: el documento y el idViaje ingresados ya existen \n";
+                    }else{
+                        echo "Error al insertar viaja-pasajero: " . $viaja->getMensajeDeOperacion() . "\n";
+                    }
                 }
             } else {
                 if (!$viajeEncontrado) {
@@ -547,11 +566,20 @@ while (!$salir) {
                 echo "No existe esa relación.\n";
             }
 
-            if ($viaja->eliminar()) {
-                echo "Relación eliminada correctamente.\n";
-            } else {
-                echo "Error al eliminar relación: " . $viaja->getMensajeDeOperacion() . "\n";
+            if ($viaja->buscar($idViajes, $pDocumento)){
+                if ($viaja->eliminar()) {
+                    echo "Relación eliminada correctamente.\n";
+                } else {
+                    if (str_contains($mensaje, '1451')){
+                        echo "ERROR AL eliminar VIAJE-PASAJERO: no se pudo eliminar porque hay datos relacionados \n";
+                    }else{
+                        echo "Error al eliminar relación: " . $viaja->getMensajeDeOperacion() . "\n";   
+                    }
+                }
+            }else{
+                echo "relacion VIAJE-PASAJERO no encontrada";
             }
+            
             break;
 
         case 4: // Buscar
@@ -656,7 +684,12 @@ while (!$salir) {
                     if ($viaje->insertar()) {
                         echo "Viaje insertado correctamente.\n";
                     } else {
-                        echo "Error al insertar viaje: " . $viaje->getMensajeDeOperacion() . "\n";
+                        $mensaje = $viaje->getMensajeDeOperacion();
+                        if (str_contains($mensaje, '1062')){
+                            echo "ERROR AL INSERTAR VIAJE: el idViaje ingresado ya existe \n";
+                        }else{
+                            echo "Error al insertar viaje: " . $viaje->getMensajeDeOperacion() . "\n";
+                        }
                     }
                 } else {
                     echo "Empresa o Responsable no encontrados.\n";
@@ -732,7 +765,11 @@ while (!$salir) {
                     if ($viaje->eliminar()) {
                         echo "Viaje eliminado correctamente.\n";
                     } else {
-                        echo "Error al eliminar viaje: " . $viaje->getMensajeDeOperacion() . "\n";
+                        if (str_contains($mensaje, '1451')){
+                            echo "ERROR AL eliminar VIAJE: no se pudo eliminar porque hay datos relacionados \n";
+                        }else{
+                            echo "Error al eliminar viaje: " . $viaje->getMensajeDeOperacion() . "\n";   
+                        }
                     }
                 } else {
                     echo "No existe viaje con ese ID.\n";
@@ -805,8 +842,13 @@ while (!$salir) {
 
                 if ($empresa->insertar()) {
                     echo "Empresa insertada correctamente.\n";
-                } else {
-                    echo "Error al insertar empresa: " . $empresa->getMensajeDeOperacion() . "\n";
+                } else{
+                    $mensaje = $empresa->getMensajeDeOperacion();
+                    if (str_contains($mensaje, '1062')){
+                        echo "ERROR AL INSERTAR EMPRESA: el idEmpresa ingresado ya existe \n";
+                    }else{
+                        echo "Error al insertar empresa: " . $empresa->getMensajeDeOperacion() . "\n";
+                    }
                 }
             break;
 
@@ -856,7 +898,11 @@ while (!$salir) {
                     if ($empresa->eliminar()) {
                         echo "Empresa eliminada correctamente.\n";
                     } else {
-                        echo "Error al eliminar empresa: " . $empresa->getMensajeDeOperacion() . "\n";
+                        if (str_contains($mensaje, '1451')){
+                            echo "ERROR AL eliminar EMPRESA: no se pudo eliminar porque hay datos relacionados \n";
+                        }else{
+                            echo "Error al eliminar empresa: " . $empresa->getMensajeDeOperacion() . "\n";
+                        }
                     }
                 }
             break;
