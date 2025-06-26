@@ -114,7 +114,7 @@ class Empresa {
         }
 
         if ($base->Iniciar()) {
-            $consulta = "SELECT * FROM empresa WHERE idempresa = " . intval($idEmpresa) . "AND estadoE = TRUE";
+            $consulta = "SELECT * FROM empresa WHERE idempresa = " . intval($idEmpresa) . " AND estadoE = TRUE";
             if ($base->Ejecutar($consulta)) {
                 $fila = $base->Registro();
                 if ($fila != null) {
