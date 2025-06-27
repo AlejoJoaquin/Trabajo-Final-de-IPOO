@@ -16,7 +16,7 @@ $bd = new BaseDeDatos();
 if ($bd->iniciar()){
     echo "se ha iniciado correctamente \n";
 }else{
-    echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH \n";
+    echo "No se a podido iniciar correctamente la base de datos \n";
 }
 $salir = false;
 while (!$salir) {
@@ -232,7 +232,7 @@ while (!$salir) {
                 $responsableV = new ResponsableV();
 
                 do {
-                    echo "Ingrese número empleado a modificar: ";
+                    echo "Ingrese el número de documento del empleado a modificar: ";
                     $numEmpleado = trim(fgets(STDIN));
                 } while (!esNum($numEmpleado));
 
