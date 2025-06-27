@@ -157,27 +157,26 @@ class ResponsableV extends Persona {
         return $respuesta;
     }
 
-    public function eliminar() {
+    public function eliminar(){
         $base = new BaseDeDatos();
         $respuesta = false;
         $doc = $this->getDocumento();
         // como empresa, no me interesa tener guardado una persona que no trabaja para mi
-        if ($base->Iniciar()) {
+        if($base->Iniciar()){
             $consulta = "UPDATE responsable SET estadoResponsable = FALSE WHERE rdocumento = '" . $doc . "'";
-            if ($base->Ejecutar($consulta)) {
+            if($base->Ejecutar($consulta)){
                 $consultaPersona = "UPDATE persona SET estadoPersona = FALSE WHERE documento = '" . $doc . "'";
-                if ($base->Ejecutar($consultaPersona)){
+                if($base->Ejecutar($consultaPersona)){
                     $this->setEstadoResponsable(false);
                     $this->setEstadoPersona(false);
                     $respuesta = true;
                 }
-            } else {
+            }else{
                 $this->setMensajeDeOperacion("No se pudo eliminar el responsable. Puede estar relacionado a otro dato.");
             }
-        } else {
+        }else{
             $this->setMensajeDeOperacion("Error al conectar con la base de datos.");
         }
-
         return $respuesta;
     }
 
