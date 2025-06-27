@@ -8,20 +8,21 @@ CREATE TABLE persona (
 
 CREATE TABLE pasajero (
     pdocumento varchar(15) PRIMARY KEY,
-    ptelefono int,
+    ptelefono varchar(20),
     FOREIGN KEY (pdocumento) REFERENCES persona(documento)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
 
 CREATE TABLE responsable (
-    rnumeroempleado bigint AUTO_INCREMENT PRIMARY KEY,
-    rnumerolicencia bigint,
-    rdocumento varchar(15),
+    rnumeroempleado BIGINT AUTO_INCREMENT UNIQUE,
+    rnumerolicencia BIGINT UNIQUE,
+    rdocumento varchar(15) PRIMARY KEY,
     FOREIGN KEY (rdocumento) REFERENCES persona(documento)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
+
 
 CREATE TABLE empresa (
     idempresa bigint AUTO_INCREMENT PRIMARY KEY,
@@ -34,12 +35,12 @@ CREATE TABLE viaje (
     vdestino varchar(150),
     vcantmaxpasajeros int,
     idempresa bigint,
-    rnumeroempleado bigint,
+    rdocumento varchar(15),
     vimporte float,
     FOREIGN KEY (idempresa) REFERENCES empresa(idempresa)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (rnumeroempleado) REFERENCES responsable(rnumeroempleado)
+    FOREIGN KEY (rdocumento) REFERENCES responsable(rdocumento)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
