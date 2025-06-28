@@ -1,14 +1,14 @@
 CREATE TABLE persona (
-    documento varchar(15) PRIMARY KEY,
-    nombre varchar(150),
-    apellido varchar(150)
+    documento VARCHAR(15) PRIMARY KEY,
+    nombre VARCHAR(150),
+    apellido VARCHAR(150),
+    estadoPersona BOOLEAN DEFAULT TRUE
 );
 
-/*hola*/
-
 CREATE TABLE pasajero (
-    pdocumento varchar(15) PRIMARY KEY,
-    ptelefono varchar(20),
+    pdocumento VARCHAR(15) PRIMARY KEY,
+    ptelefono VARCHAR(20),
+    estadoPasajero BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (pdocumento) REFERENCES persona(documento)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
@@ -17,26 +17,28 @@ CREATE TABLE pasajero (
 CREATE TABLE responsable (
     rnumeroempleado BIGINT AUTO_INCREMENT UNIQUE,
     rnumerolicencia BIGINT UNIQUE,
-    rdocumento varchar(15) PRIMARY KEY,
+    rdocumento VARCHAR(15) PRIMARY KEY,
+    estadoResponsable BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (rdocumento) REFERENCES persona(documento)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
 
-
 CREATE TABLE empresa (
-    idempresa bigint AUTO_INCREMENT PRIMARY KEY,
-    enombre varchar(150),
-    edireccion varchar(150)
+    idempresa BIGINT AUTO_INCREMENT PRIMARY KEY,
+    enombre VARCHAR(150),
+    edireccion VARCHAR(150),
+    estadoE BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE viaje (
-    idviaje bigint AUTO_INCREMENT PRIMARY KEY,
-    vdestino varchar(150),
-    vcantmaxpasajeros int,
-    idempresa bigint,
-    rdocumento varchar(15),
-    vimporte float,
+    idviaje BIGINT AUTO_INCREMENT PRIMARY KEY,
+    vdestino VARCHAR(150),
+    vcantmaxpasajeros INT,
+    idempresa BIGINT,
+    rdocumento VARCHAR(15),
+    vimporte FLOAT,
+    estadoViaje BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (idempresa) REFERENCES empresa(idempresa)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -46,8 +48,9 @@ CREATE TABLE viaje (
 );
 
 CREATE TABLE viaja (
-    pdocumento varchar(15),
-    idviaje bigint,
+    pdocumento VARCHAR(15),
+    idviaje BIGINT,
+    estadoViajePasajero BOOLEAN DEFAULT TRUE,
     PRIMARY KEY (pdocumento, idviaje),
     FOREIGN KEY (pdocumento) REFERENCES pasajero(pdocumento)
         ON UPDATE CASCADE
